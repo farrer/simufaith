@@ -18,7 +18,9 @@
 */
 
 #include "person.h"
+#include "house.h"
 #include "world.h"
+
 #include <assert.h>
 using namespace SimuFaith;
 
@@ -127,6 +129,9 @@ void Person::Mind::defineCurrentFaith()
    FaithInfo* f = (FaithInfo*) faiths.getFirst();
    for(int i = 0; i < faiths.getTotal(); i++)
    {
+      /* Will change faith if liked a new one (>50) and liked it more
+       * than the current one (if any), or, if equally liked, if disliked
+       * it lesser than the current one (if any). */
       if((f != curFaith) && (f->getLikeness() > 50) &&
          ((curFaith == NULL) || 
           ((f->getLikeness() > curFaith->getLikeness()) ||

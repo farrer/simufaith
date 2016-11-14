@@ -26,6 +26,8 @@
 
 namespace SimuFaith
 {
+   class House;
+
    /*! A single person - potentially a faith follower - in the game */
    class Person
    {
@@ -85,17 +87,37 @@ namespace SimuFaith
                FaithInfo* curFaith; /**< Info about current adopted faith */
          };
 
+         /*! A person's child representation. Usually, parent's faith have
+          * a important (but not immediat) role on children's faith 
+          * definition. */
+         class Child : public Kobold::ListElement
+         {
+            public:
+               Person* person; /**< The child's person */
+         };
+
+         Person(Kobold::String name, int age, Person* parentA, Person* parentB,
+                Kobold::String filename, Ogre::SceneManager* sceneManager);
+         ~Person();
+
+         /*! \return pointer to current person's Faith */
+         Faith* getFaith();
+
+         /*! \return first person's parent pointer (could be NULL) */
+         Person* getParentA();
+         /*! \return second person's parent pointer (could be NULL) */
+         Person* getParentB();
+
       private:
-         Mind mind; /**< Person's mind */
-         int age; /**< Person's age */
+         Mind mind;            /**< Person's mind */
+         int age;              /**< Person's age */
+         Kobold::String name;  /**< Person's name */
 
-         // TODO: where is their home? 
-         //
-         // TODO: where is their work?
-         //
-         // TODO: have work? is it related to a Faith? 
+         Person* parentA;      /**< Person's first parent */
+         Person* parentB;      /**< Person's second parent */
 
-         
+         House* home; /**< Person's home */
+         //TODO Office* work; /**< Person's work */
 
          Goblin::Model3d* model; /**< Person's model */
          //TODO: portrait? 

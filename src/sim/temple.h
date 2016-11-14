@@ -20,15 +20,14 @@
 #ifndef _simufaith_temple_h
 #define _simufaith_temple_h
 
-#include <kobold/list.h>
-#include <goblin/model3d.h>
+#include "building.h"
 
 namespace SimuFaith
 {
 
    /*! The temple is the basic building of a Faith. It's where the followers
     * go for miracles or to just hear Messiah's words by its priests. */
-   class Temple : public Kobold::ListElement
+   class Temple : public Building
    {
       public:
          enum TempleLevel
@@ -43,8 +42,8 @@ namespace SimuFaith
 
          /*! Temple Constructor.
           * \param level initial temple's level
-          * \param capacity initial capacity */
-         Temple(TempleLevel level);
+          * \param sceneManager Ogre's sceneManager used. */
+         Temple(TempleLevel level, Ogre::SceneManager* sceneManager);
 
          /*! Destructor */
          ~Temple();
@@ -74,13 +73,12 @@ namespace SimuFaith
 
          static int capacities[TOTAL_LEVELS];
          static int ranges[TOTAL_LEVELS];
+         static Kobold::String models[TOTAL_LEVELS];
 
          TempleLevel level;   /**< Current building level */
          int capacity;        /**< Current temple capacity */
          int attendance;      /**< Current temple attendance */
          int range;           /**< Current temple range */
-
-         Goblin::Model3d* model;      /**< Model used for the temple */
    };
 
 }

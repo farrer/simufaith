@@ -21,6 +21,9 @@
 #define _simufaith_world_h
 
 #include "faith.h"
+#include "building.h"
+
+#include <kobold/list.h>
 
 namespace SimuFaith
 {
@@ -44,8 +47,17 @@ namespace SimuFaith
          /*! \return current list of Faiths */
          static Kobold::List* getFaiths();
 
+         /*! Add a building to current buildings list
+          * \param building pointer to building to add */
+         static void addBuilding(Building* building);
+
+         /*! Remove a building from the list (but without deleting it).
+          * \param building pointer to the building to remove from the list */
+         static void removeBuilding(Building* building);
+
       private:
          static Kobold::List* faiths; /**< Current faiths */
+         static Kobold::List* buildings; /**< Overall list of buildings */
    };
 
 }

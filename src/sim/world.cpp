@@ -26,6 +26,7 @@ using namespace SimuFaith;
 void World::init()
 {
    faiths = new Kobold::List();
+   buildings = new Kobold::List();
 }
 
 /*************************************************************************
@@ -37,6 +38,11 @@ void World::end()
    {
       delete faiths;
       faiths = NULL;
+   }
+   if(buildings)
+   {
+      delete buildings;
+      buildings = NULL;
    }
 }
 
@@ -60,8 +66,25 @@ Kobold::List* World::getFaiths()
 }
 
 /*************************************************************************
+ *                              addBuilding                              *
+ *************************************************************************/
+void World::addBuilding(Building* building)
+{
+   buildings->insert(building);
+}
+
+/*************************************************************************
+ *                            removeBuilding                             *
+ *************************************************************************/
+void World::removeBuilding(Building* building)
+{
+   buildings->removeWithoutDelete(building);
+}
+
+
+/*************************************************************************
  *                                Variables                              *
  *************************************************************************/
 Kobold::List* World::faiths = NULL;
-
+Kobold::List* World::buildings = NULL;
 

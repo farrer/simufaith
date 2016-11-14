@@ -26,13 +26,13 @@ using namespace SimuFaith;
 /*************************************************************************
  *                                 Constructor                           *
  *************************************************************************/
-Temple::Temple(Temple::TempleLevel level)
+Temple::Temple(Temple::TempleLevel level, Ogre::SceneManager* sceneManager)
+       :Building(sceneManager, models[level])
 {
    this->level = level;
    this->capacity = capacities[level];
    this->range = ranges[level];
    this->attendance = 0;
-   this->model = NULL; //TODO
 }
 
 /*************************************************************************
@@ -40,10 +40,6 @@ Temple::Temple(Temple::TempleLevel level)
  *************************************************************************/
 Temple::~Temple()
 {
-   if(model)
-   {
-      delete model;
-   }
 }
 
 /*************************************************************************
@@ -75,7 +71,7 @@ int Temple::getAttendance()
  *************************************************************************/
 float Temple::getDistance(float x, float z)
 {
-   Ogre::Vector3 pos = model->getPosition();
+   Ogre::Vector3 pos = getModel()->getPosition();
    float difX = pos[0] - x;
    float difZ = pos[2] - z;
 
@@ -96,3 +92,7 @@ int Temple::capacities[TOTAL_LEVELS] = {30, 80, 200, 500, 2000};
 /* Range values, in meters */
 int Temple::ranges[TOTAL_LEVELS] = {100, 200, 2000, 10000, 30000};
 
+Kobold::String Temple::models[TOTAL_LEVELS] = 
+      {"building/temples/humble.mesh", "building/temples/small.mesh",
+         "building/temples/normal.mesh", "building/temples/large.mesh",
+         "building/temples/huge.mesh"};

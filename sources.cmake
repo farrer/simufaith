@@ -1,5 +1,7 @@
 set(SIM_LIB_SOURCES
+   src/sim/building.cpp
    src/sim/faith.cpp
+   src/sim/house.cpp
    src/sim/person.cpp
    src/sim/priest.cpp
    src/sim/temple.cpp
@@ -7,7 +9,9 @@ set(SIM_LIB_SOURCES
 )
 
 set(SIM_LIB_HEADERS
+   src/sim/building.h
    src/sim/faith.h
+   src/sim/house.h
    src/sim/person.h
    src/sim/priest.h
    src/sim/temple.h
