@@ -1,0 +1,7 @@
+scifi skin
+ \
+  Adapted by DNTeam from:
+  author: Buch
+  license: CC0
+  source: http://opengameart.org/content/sci-fi-user-interface-elements
+

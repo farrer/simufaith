@@ -1,0 +1,5 @@
+
+sel.png
+    Author: DNTeam
+    License: GPL 3.0 or latter
+    Source: http://opengameart.org/content/dnt-mouse-cursors

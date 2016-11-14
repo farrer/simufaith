@@ -1,0 +1,17 @@
+
+Code
+    farrer, using Ogre3d as rendering engine, SDL2, Vorbis and OpenALSoft.
+
+Skin
+   Original concept by Buch (http://opengameart.org/users/buch), adapted by
+   DNTeam at the same CC0 license.
+
+Art
+    Created by DNTeam, double licensed under CC-By-SA 3.0 or GPL 3.0, with the
+    exception of the following:
+
+    Liberation-fonts, licensed under SIL Open Font License, Version 1.1;
+
+
+
+
