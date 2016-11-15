@@ -17,99 +17,83 @@
    along with SimuFaith.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "house.h"
+#include "office.h"
 #include "person.h"
 using namespace SimuFaith;
 
 /*************************************************************************
- *                               Inhabitant                              *
+ *                                 Worker                                *
  *************************************************************************/
-House::Inhabitant::Inhabitant(Person* person, House* house)
+Office::Worker::Worker(Person* person, Office::WorkerLevel level, 
+      Office* office)
 {
    this->person = person;
-   this->house = house;
+   this->level = level;
+   this->office = office;
 }
 
 /*************************************************************************
- *                              ~Inhabitant                              *
+ *                                ~Worker                                *
  *************************************************************************/
-House::Inhabitant::~Inhabitant()
+Office::Worker::~Worker()
 {
 }
 
 /*************************************************************************
- *                               getPerson                               *
+ *                                getPerson                              *
  *************************************************************************/
-Person* House::Inhabitant::getPerson()
+Person* Office::Worker::getPerson()
 {
    return person;
 }
 
 /*************************************************************************
- *                               getHouse                                *
+ *                                getLevel                               *
  *************************************************************************/
-House* House::Inhabitant::getHouse()
+Office::WorkerLevel Office::Worker::getLevel()
 {
-   return house;
+   return level;
 }
 
 /*************************************************************************
- *                                 House                                 *
+ *                                getOffice                              *
  *************************************************************************/
-House::House(int capacity, Kobold::String filename, 
-      Ogre::SceneManager* sceneManager)
-      :Building(sceneManager, filename)
+Office* Office::Worker::getOffice()
 {
-   this->capacity = capacity;
+   return office;
 }
 
 /*************************************************************************
- *                                ~House                                 *
+ *                                 Office                                *
  *************************************************************************/
-House::~House()
+Office::Office(Ogre::SceneManager* sceneManager, Kobold::String filename)
+       :Building(sceneManager, filename)
+{
+}
+         
+/*************************************************************************
+ *                                ~Office                                *
+ *************************************************************************/
+Office::~Office()
 {
 }
 
 /*************************************************************************
- *                            addInhabitant                              *
+ *                               addWorker                               *
  *************************************************************************/
-void House::addInhabitant(Person* person)
+void Office::addWorker(Person* person, Office::WorkerLevel level)
 {
-   Inhabitant* inh = new Inhabitant(person, this);
-   person->setAsInhabitant(inh);
-   inhabitants.insert(inh);
+   Worker* worker = new Worker(person, level, this);
+   person->setAsWorker(worker);
+   personnel.insert(worker);
 }
 
 /*************************************************************************
- *                           removeInhabitant                            *
+ *                             removeWorker                              *
  *************************************************************************/
-void House::removeInhabitant(House::Inhabitant* inhabitant)
+void Office::removeWorker(Worker* worker)
 {
-   inhabitant->getPerson()->setAsInhabitant(NULL);
-   inhabitants.remove(inhabitant);
-}
-
-/*************************************************************************
- *                             getCpacity                                *
- *************************************************************************/
-int House::getCapacity()
-{
-   return capacity;
-}
-
-/*************************************************************************
- *                         getTotalInhabitants                           *
- *************************************************************************/
-int House::getTotalInhabitants()
-{
-   return inhabitants.getTotal();
-}
-
-/*************************************************************************
- *                          getAvailableSpace                            *
- *************************************************************************/
-int House::getAvailableSpace()
-{
-   return capacity - inhabitants.getTotal();
+   worker->getPerson()->setAsWorker(NULL);
+   personnel.remove(worker);
 }
 

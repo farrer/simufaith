@@ -18,7 +18,6 @@
 */
 
 #include "person.h"
-#include "house.h"
 #include "world.h"
 
 #include <assert.h>
@@ -155,4 +154,162 @@ Faith* Person::Mind::getFaith()
    }
    return NULL;
 }
+
+/***********************************************************************
+ *                               Child                                 *
+ ***********************************************************************/
+Person::Child::Child(Person* person)
+{
+   this->person = person;
+}
+
+/***********************************************************************
+ *                               ~Child                                *
+ ***********************************************************************/
+Person::Child::~Child()
+{
+}
+
+/***********************************************************************
+ *                              getPerson                              *
+ ***********************************************************************/
+Person* Person::Child::getPerson()
+{
+   return person;
+}
+
+/***********************************************************************
+ *                                Person                               *
+ ***********************************************************************/
+Person::Person(Kobold::String name, int age, Person* parentA, Person* parentB,
+      Kobold::String filename, Ogre::SceneManager* sceneManager)
+{
+   /* Define things */
+   this->name = name;
+   this->age = age;
+   this->parentA = parentA;
+   if(parentA)
+   {
+      parentA->addChild(this);
+   }
+   this->parentB = parentB;
+   if(parentB)
+   {
+      parentB->addChild(this);
+   }
+
+   /* Initilly unemployed and homeless */
+   this->worker = NULL;
+   this->inhabitant = NULL;
+
+   /* Load its model */
+   this->model = new Goblin::Model3d("person" + 
+         Kobold::StringUtil::toString(count), filename, sceneManager);
+   count++;
+}
+
+/***********************************************************************
+ *                               ~Person                               *
+ ***********************************************************************/
+Person::~Person()
+{
+   if(worker)
+   {
+      worker->getOffice()->removeWorker(worker);
+   }
+   if(inhabitant)
+   {
+      inhabitant->getHouse()->removeInhabitant(inhabitant);
+   }
+   if(model)
+   {
+      delete model;
+   }
+}
+
+/***********************************************************************
+ *                              getFaith                               *
+ ***********************************************************************/
+Faith* Person::getFaith()
+{
+   return mind.getFaith();
+}
+
+/***********************************************************************
+ *                              getParentA                             *
+ ***********************************************************************/
+Person* Person::getParentA()
+{
+   return parentA;
+}
+
+/***********************************************************************
+ *                              getParentB                             *
+ ***********************************************************************/
+Person* Person::getParentB()
+{
+   return parentB;
+}
+
+/***********************************************************************
+ *                              setAsWorker                            *
+ ***********************************************************************/
+void Person::setAsWorker(Office::Worker* worker)
+{
+   this->worker = worker;
+}
+
+/***********************************************************************
+ *                               getWorker                             *
+ ***********************************************************************/
+Office::Worker* Person::getWorker()
+{
+   return worker;
+}
+
+/***********************************************************************
+ *                          setAsInhabitant                            *
+ ***********************************************************************/
+void Person::setAsInhabitant(House::Inhabitant* inhabitant)
+{
+   this->inhabitant = inhabitant;
+}
+
+/***********************************************************************
+ *                            getInhabitant                            *
+ ***********************************************************************/
+House::Inhabitant* Person::getInhabitant()
+{
+   return inhabitant;
+}
+
+/***********************************************************************
+ *                               addChild                              *
+ ***********************************************************************/
+void Person::addChild(Person* child)
+{
+   children.insert(new Child(child));
+}
+
+/***********************************************************************
+ *                              removeChild                            *
+ ***********************************************************************/
+void Person::removeChild(Person* child)
+{
+   Child* c = (Child*) children.getFirst();
+   for(int i = 0; i < children.getTotal(); i++)
+   {
+      if(c->getPerson() == child)
+      {
+         children.remove(c);
+         break;
+      }
+      c = (Child*) c->getNext();
+   }
+}
+
+/***********************************************************************
+ *                              static vars                            *
+ ***********************************************************************/
+int Person::count = 0;
 

@@ -26,13 +26,13 @@ using namespace SimuFaith;
  *************************************************************************/
 Building::Building(Ogre::SceneManager* sceneManager, Kobold::String filename)
 {
-   count++;
    this->name = "building" + Kobold::StringUtil::toString(count);
    this->sceneManager = sceneManager;
    this->filename = filename;
    model = new Goblin::Model3d(this->name, this->filename, this->sceneManager);
 
    World::addBuilding(this);
+   count++;
 }
 
 /*************************************************************************

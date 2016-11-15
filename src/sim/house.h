@@ -21,10 +21,11 @@
 #define _simufaith_house_h
 
 #include "building.h"
-#include "person.h"
 
 namespace SimuFaith
 {
+   class Person;
+
    /*! A house is a building where people live. */
    class House: public Building
    {
@@ -34,15 +35,19 @@ namespace SimuFaith
          {
             public:
                /*! Constructor */
-               Inhabitant(Person* person);
+               Inhabitant(Person* person, House* house);
                /*! Destructor */
                ~Inhabitant();
 
-               /*! Get the person of this inhabitant */
+               /*! \return person of this inhabitant */
                Person* getPerson();
+
+               /*! \return house of the inhabitant */
+               House* getHouse();
 
             private:
                Person* person; /**< A single inhabitant */
+               House* house; /**< House where it inhabits */
          };
 
          /*! Constructor */
@@ -52,13 +57,14 @@ namespace SimuFaith
          ~House();
 
          /*! Add a person to inhabit the house.
-          * \param person pointer to the person to inhabit the house */
+          * \param person pointer to the person to inhabit the house.
+          * \note this function will set person->inhabitant pointer. */
          void addInhabitant(Person* person);
 
          /*! Remove an inhabitant from the house (ie: the person will no 
           * longer inhabit the house, but still exists as a person).
-          * \param person pointer to the person to no more inhabit here. */
-         void removeInhabitant(Person* person);
+          * \param inhabitant pointer to the inhabitant to remove. */
+         void removeInhabitant(Inhabitant* inhabitant);
 
          /*! \return max capacity of the house */
          int getCapacity();

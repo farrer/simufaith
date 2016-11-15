@@ -21,13 +21,14 @@
 #define _simufaith_person_h
 
 #include "faith.h"
+#include "house.h"
+#include "office.h"
+
 #include <kobold/list.h>
 #include <goblin/model3d.h>
 
 namespace SimuFaith
 {
-   class House;
-
    /*! A single person - potentially a faith follower - in the game */
    class Person
    {
@@ -93,12 +94,21 @@ namespace SimuFaith
          class Child : public Kobold::ListElement
          {
             public:
+               /*! Constructor */
+               Child(Person* person);
+               /*! Destructor */
+               ~Child();
+               /*! \return person of the child */
+               Person* getPerson();
+            private:
                Person* person; /**< The child's person */
          };
 
+         /*! Constructor */
          Person(Kobold::String name, int age, Person* parentA, Person* parentB,
                 Kobold::String filename, Ogre::SceneManager* sceneManager);
-         ~Person();
+         /*! Destructor */
+         virtual ~Person();
 
          /*! \return pointer to current person's Faith */
          Faith* getFaith();
@@ -108,6 +118,28 @@ namespace SimuFaith
          /*! \return second person's parent pointer (could be NULL) */
          Person* getParentB();
 
+         /*! Set worker of the person (if NULL -> unemployed).
+          * \param worker worker pointer */
+         void setAsWorker(Office::Worker* worker);
+
+         /*! \return worker info, NULL if person is unemployed */
+         Office::Worker* getWorker();
+
+         /*! Set person as an inhabitant (NULL -> homeless)
+          * \param inhabitant pointer to its nhabitant information */
+         void setAsInhabitant(House::Inhabitant* inhabitant);
+
+         /*! \return inhabitant info. NULL if person is homeless. */
+         House::Inhabitant* getInhabitant();
+
+         /*! Add a person a a child of this one 
+          * \param child person to be child of this one */
+         void addChild(Person* child);
+
+         /*! Remove a person's child (usually due to death
+          * \param child pointer to the person to remove. */
+         void removeChild(Person* child);
+
       private:
          Mind mind;            /**< Person's mind */
          int age;              /**< Person's age */
@@ -116,10 +148,14 @@ namespace SimuFaith
          Person* parentA;      /**< Person's first parent */
          Person* parentB;      /**< Person's second parent */
 
-         House* home; /**< Person's home */
-         //TODO Office* work; /**< Person's work */
+         House::Inhabitant* inhabitant; /**< Home information */
+         Office::Worker* worker; /**< Job information */
 
          Goblin::Model3d* model; /**< Person's model */
+
+         Kobold::List children; /**< Person's children */
+
+         static int count;
          //TODO: portrait? 
    };
 

@@ -27,6 +27,8 @@
 
 namespace SimuFaith
 {
+   class Person;
+
    /*! A basic building class, representing a building in the game. */
    class Building : public Kobold::ListElement
    {
