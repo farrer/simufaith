@@ -54,7 +54,7 @@ Faith* Person::FaithInfo::getFaith()
 /***********************************************************************
  *                             getLikeness                             *
  ***********************************************************************/
-unsigned char Person::FaithInfo::getLikeness()
+int Person::FaithInfo::getLikeness()
 {
    return likeness;
 }
@@ -62,7 +62,7 @@ unsigned char Person::FaithInfo::getLikeness()
 /***********************************************************************
  *                           getDislikeness                            *
  ***********************************************************************/
-unsigned char Person::FaithInfo::getDislikeness()
+int Person::FaithInfo::getDislikeness()
 {
    return dislikeness;
 }
@@ -70,10 +70,44 @@ unsigned char Person::FaithInfo::getDislikeness()
 /***********************************************************************
  *                                 set                                 *
  ***********************************************************************/
-void Person::FaithInfo::set(unsigned char likeness, unsigned char dislikeness)
+void Person::FaithInfo::set(int likeness, int dislikeness)
 {
    this->likeness = likeness;
    this->dislikeness = dislikeness;
+}
+
+/***********************************************************************
+ *                             addLikeness                             *
+ ***********************************************************************/
+void Person::FaithInfo::addLikeness(int value)
+{
+   likeness += value;
+
+   /* Apply limits. */
+   if(likeness > FAITH_OPINION_MAX_VALUE)
+   {
+      likeness = FAITH_OPINION_MAX_VALUE;
+   } else if(likeness < 0)
+   {
+      likeness = 0;
+   }
+}
+
+/***********************************************************************
+ *                           addDislikeness                            *
+ ***********************************************************************/
+void Person::FaithInfo::addDislikeness(int value)
+{
+   dislikeness += value;
+
+   /* Apply limits. */
+   if(dislikeness > FAITH_OPINION_MAX_VALUE)
+   {
+      dislikeness = FAITH_OPINION_MAX_VALUE;
+   } else if(dislikeness < 0)
+   {
+      dislikeness = 0;
+   }
 }
 
 /***********************************************************************
@@ -128,10 +162,10 @@ void Person::Mind::defineCurrentFaith()
    FaithInfo* f = (FaithInfo*) faiths.getFirst();
    for(int i = 0; i < faiths.getTotal(); i++)
    {
-      /* Will change faith if liked a new one (>50) and liked it more
+      /* Will change faith if liked a new one (>HALF) and liked it more
        * than the current one (if any), or, if equally liked, if disliked
        * it lesser than the current one (if any). */
-      if((f != curFaith) && (f->getLikeness() > 50) &&
+      if((f != curFaith) && (f->getLikeness() > FAITH_OPINION_HALF_VALUE) &&
          ((curFaith == NULL) || 
           ((f->getLikeness() > curFaith->getLikeness()) ||
            ((f->getLikeness() == curFaith->getLikeness()) &&

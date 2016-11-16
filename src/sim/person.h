@@ -29,6 +29,12 @@
 
 namespace SimuFaith
 {
+
+/*! Max value likeness or dislikeness could be */
+#define FAITH_OPINION_MAX_VALUE       100000
+/*! Median value for likeness or dislikeness */
+#define FAITH_OPINION_HALF_VALUE (FAITH_OPINION_MAX_VALUE / 2)
+
    /*! A single person - potentially a faith follower - in the game */
    class Person
    {
@@ -46,19 +52,33 @@ namespace SimuFaith
                /*! \return Faith related to this info */
                Faith* getFaith();
 
-               /*! \return [0..100] of how much like related Faith */
-               unsigned char getLikeness();
+               /*! \return [0 .. FAITH_OPINION_MAX_VALUE] of how much 
+                * like related Faith */
+               int getLikeness();
 
-               /*! \return [0..100] of how much dislike related Faith */
-               unsigned char getDislikeness();
+               /*! \return [0 .. FAITH_OPINION_MAX_VALUE] of how much dislike 
+                * related Faith */
+               int getDislikeness();
 
                /*! Set how much like and dislike related Faith */
-               void set(unsigned char likeness, unsigned char dislikeness);
+               void set(int likeness, int dislikeness);
+
+               /*! Add a value to the likeness, limited to 
+                * [0 .. FAITH_OPINION_MAX_VALUE].
+                * \param value to add. Obviously, if negative, will dec. */
+               void addLikeness(int value);
+
+               /*! Add a value to the dislikeness, limited to 
+                * [0 .. FAITH_OPINION_MAX_VALUE].
+                * \param value to add. Obviously, if negative, will dec. */
+               void addDislikeness(int value);
 
             private:
                Faith* faith; /**< Faith which this info is related to */
-               unsigned char likeness;  /**< [0..100] of how much like it  */
-               unsigned char dislikeness; /**< [0..100] of how much dislike */
+               int likeness;  /**< [0 .. FAITH_OPINION_MAX_VALUE] of how 
+                                   much like it  */
+               int dislikeness; /**< [0 .. FAITH_OPINION_MAX_VALUE] of how 
+                                     much dislike it */
          };
 
          /*! What is inside a person's mind. Faiths, faiths everywhere. */
@@ -89,8 +109,7 @@ namespace SimuFaith
          };
 
          /*! A person's child representation. Usually, parent's faith have
-          * a important (but not immediat) role on children's faith 
-          * definition. */
+          * an important role on children's faith definition. */
          class Child : public Kobold::ListElement
          {
             public:
