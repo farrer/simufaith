@@ -19,6 +19,7 @@
 
 #include "person.h"
 #include "world.h"
+#include "util.h"
 
 #include <assert.h>
 using namespace SimuFaith;
@@ -190,6 +191,85 @@ Faith* Person::Mind::getFaith()
 }
 
 /***********************************************************************
+ *                             checkRandom                             *
+ ***********************************************************************/
+bool Person::Mind::checkRandom(int likeOrDislikeValue)
+{
+   int randVal = getRandom(FAITH_OPINION_MAX_VALUE);
+
+   /* Should apply if our random value is lesser than like or dislike value.
+    * This way, the greater the likeness or dislikeness value, the greater is
+    * its probability to influence others (and if Maximum, will always 
+    * influence). */
+   return likeOrDislikeValue >= randVal;
+}
+
+/***********************************************************************
+ *                           applyInfluence                            *
+ ***********************************************************************/
+void Person::Mind::applyInfluence(Person* target, int value)
+{
+   //TODO: create unit test for this function. 
+
+   /* Note that if the likeness or dislikeness is lesser than the
+    * target likeness or dislikeness, no influence will happen (as the target
+    * is much more convincted of its opinion than the person). */
+
+   /* Firstly, let's apply current Faith as a likeness-only one (although a
+    * person can dislike somethings of its current faith, it tends to not
+    * show it to other people). */
+   if(curFaith)
+   {
+      /* Only influence if this person like it more than the
+       * target's current faith likeness (if any) */
+      FaithInfo* tgtFaith = target->mind.getFaithInfo(curFaith->getFaith());
+      if( (curFaith->getLikeness() > tgtFaith->getLikeness()) &&
+          ((!target->mind.curFaith) || 
+          (curFaith->getLikeness() > target->mind.curFaith->getLikeness())) )
+      {
+         if(checkRandom(curFaith->getLikeness()))
+         {
+            tgtFaith->addLikeness(value);
+         }
+      }
+   }
+
+   /* Make sure faiths list are of equivalent size. */
+   assert(faiths.getTotal() == target->mind.faiths.getTotal());
+
+   /* Let's apply each other faith likeness / dislikeness */
+   FaithInfo* f = (FaithInfo*) faiths.getFirst();
+   FaithInfo* tgt = (FaithInfo*) target->mind.faiths.getFirst();
+   for(int i = 0; i < faiths.getTotal(); i++)
+   {
+      /* Make sure we are doing at the same faith for person and target */
+      assert(f->getFaith() == tgt->getFaith());
+
+      /* No need to apply person's current target again. */
+      if(f != curFaith)
+      {
+         /* Let's check if will apply likeness to it */
+         if((f->getLikeness() > tgt->getLikeness()) &&
+            (checkRandom(f->getLikeness())))
+         {
+            tgt->addLikeness(value);
+         }
+
+         /* And check if will apply dislikeness. note that at this case,
+          * we also check the person's dislikeness against target likeness,
+          * as we the target like it a lot, it tends to ignore person's
+          * arguments on dislikeness. */
+         if((f->getDislikeness() > tgt->getDislikeness()) &&
+            (f->getDislikeness() >= tgt->getLikeness()))
+         {
+            tgt->addDislikeness(value);
+         }
+      }
+      f = (FaithInfo*) f->getNext();
+   }
+}
+
+/***********************************************************************
  *                               Child                                 *
  ***********************************************************************/
 Person::Child::Child(Person* person)
@@ -240,6 +320,8 @@ Person::Person(Kobold::String name, int age, Person* parentA, Person* parentB,
    this->model = new Goblin::Model3d("person" + 
          Kobold::StringUtil::toString(count), filename, sceneManager);
    count++;
+
+   World::addPerson(this);
 }
 
 /***********************************************************************
@@ -255,6 +337,7 @@ Person::~Person()
    {
       inhabitant->getHouse()->removeInhabitant(inhabitant);
    }
+   World::removePerson(this);
    if(model)
    {
       delete model;
@@ -340,6 +423,38 @@ void Person::removeChild(Person* child)
       }
       c = (Child*) c->getNext();
    }
+}
+
+/***********************************************************************
+ *                                 step                                *
+ ***********************************************************************/
+void Person::step()
+{
+   /* Apply both parents influence */
+   if(parentA)
+   {
+      parentA->mind.applyInfluence(this, 5);
+   }
+   if(parentB)
+   {
+      parentB->mind.applyInfluence(this, 5);
+   }
+
+   if(!inhabitant)
+   {
+      /* Current person is homeless and more vulnerable */
+      //TODO
+   }
+
+   if(!worker)
+   {
+      /* Current person doesn't have a job. It seems more vulnerable to 
+       * dislike its current faith. */
+      //TODO
+   }
+
+   /* After that, let's redefine current person's faith, if any */
+   mind.defineCurrentFaith();
 }
 
 /***********************************************************************

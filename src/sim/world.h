@@ -22,6 +22,7 @@
 
 #include "faith.h"
 #include "building.h"
+#include "person.h"
 
 #include <kobold/list.h>
 
@@ -48,16 +49,43 @@ namespace SimuFaith
          static Kobold::List* getFaiths();
 
          /*! Add a building to current buildings list
-          * \param building pointer to building to add */
+          * \param building pointer to building to add
+          * \note usually called by building constructor. */
          static void addBuilding(Building* building);
 
          /*! Remove a building from the list (but without deleting it).
-          * \param building pointer to the building to remove from the list */
+          * \param building pointer to the building to remove from the list.
+          * \note usually called by building destructor */
          static void removeBuilding(Building* building);
 
+         /*! Add a person to the list.
+          * \param person pointer to the person to add.
+          * \note usually called by person's constructor */
+         static void addPerson(Person* person);
+
+         /*! Remove a person from the list (without deleting it).
+          * \param person pointer to the person to remove
+          * \note usually called by person's destructor */
+         static void removePerson(Person* person);
+
+         /*! Do a simulation step */
+         static void step();
+
       private:
+         /*! Each simulation step */
+         enum SimulationStep
+         {
+            /*! Where will check building influences to its neighbors */
+            STEP_BUILDINGS,
+            /*! Where will check people personal influences, like parents,
+             * jobs (including unemployement), deaths, etc. */
+            STEP_PEOPLE,
+         };
          static Kobold::List* faiths; /**< Current faiths */
          static Kobold::List* buildings; /**< Overall list of buildings */
+         static Kobold::List* people; /**< Current people on game */
+
+         static SimulationStep curStep; /**< Current step on simulation */
    };
 
 }

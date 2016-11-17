@@ -6,6 +6,7 @@ set(SIM_LIB_SOURCES
    src/sim/person.cpp
    src/sim/priest.cpp
    src/sim/temple.cpp
+   src/sim/util.cpp
    src/sim/world.cpp
 )
 
@@ -17,6 +18,7 @@ set(SIM_LIB_HEADERS
    src/sim/person.h
    src/sim/priest.h
    src/sim/temple.h
+   src/sim/util.h
    src/sim/world.h
 )
 

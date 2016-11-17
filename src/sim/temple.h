@@ -69,6 +69,9 @@ namespace SimuFaith
           * \return if is in range or not. */
          bool isInRange(float distance);
 
+         /*! Do the temple simulation step */
+         void step();
+
       private:
 
          static int capacities[TOTAL_LEVELS];

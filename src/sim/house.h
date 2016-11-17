@@ -75,6 +75,9 @@ namespace SimuFaith
          /*! \return total space left for new inhabitants */
          int getAvailableSpace();
 
+         /*! Do the house simulation step */
+         void step();
+
       private:
          int capacity;             /**< House max capacity */
          Kobold::List inhabitants; /**< Current house inhabitants */

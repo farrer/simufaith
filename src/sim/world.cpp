@@ -27,6 +27,9 @@ void World::init()
 {
    faiths = new Kobold::List();
    buildings = new Kobold::List();
+   people = new Kobold::List();
+
+   curStep = World::STEP_BUILDINGS;
 }
 
 /*************************************************************************
@@ -34,15 +37,20 @@ void World::init()
  *************************************************************************/
 void World::end()
 {
-   if(faiths)
+   if(people)
    {
-      delete faiths;
-      faiths = NULL;
+      delete people;
+      people = NULL;
    }
    if(buildings)
    {
       delete buildings;
       buildings = NULL;
+   }
+   if(faiths)
+   {
+      delete faiths;
+      faiths = NULL;
    }
 }
 
@@ -81,10 +89,60 @@ void World::removeBuilding(Building* building)
    buildings->removeWithoutDelete(building);
 }
 
+/*************************************************************************
+ *                               addPerson                               *
+ *************************************************************************/
+void World::addPerson(Person* person)
+{
+   people->insert(person);
+}
+
+/*************************************************************************
+ *                             removePerson                              *
+ *************************************************************************/
+void World::removePerson(Person* person)
+{
+   people->removeWithoutDelete(person);
+}
+
+/*************************************************************************
+ *                                 step                                  *
+ *************************************************************************/
+void World::step()
+{
+   switch(curStep)
+   {
+      case STEP_BUILDINGS:
+      {
+         Building* building = (Building*) buildings->getFirst();
+         for(int i = 0; i < people->getTotal(); i++)
+         {
+            building->step();
+            building = (Building*) building->getNext();
+         }
+         curStep = STEP_PEOPLE;
+      }
+      break;
+      case STEP_PEOPLE:
+      {
+         Person* person = (Person*) people->getFirst();
+         for(int i = 0; i < people->getTotal(); i++)
+         {
+            person->step();
+            person = (Person*) person->getNext();
+         }
+         curStep = STEP_BUILDINGS;
+      }
+      break;
+   }
+
+}
 
 /*************************************************************************
  *                                Variables                              *
  *************************************************************************/
 Kobold::List* World::faiths = NULL;
 Kobold::List* World::buildings = NULL;
+Kobold::List* World::people = NULL;
+World::SimulationStep World::curStep = World::STEP_BUILDINGS; 
 

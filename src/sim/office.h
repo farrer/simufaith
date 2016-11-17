@@ -85,6 +85,9 @@ namespace SimuFaith
           * \note this function will delete the worker (but not its person). */
          void removeWorker(Worker* worker);
 
+         /*! Do Office specific step */
+         void step();
+
       private:
          Kobold::List personnel; /**< Workers of the office */
    };

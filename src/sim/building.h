@@ -42,6 +42,9 @@ namespace SimuFaith
          /*! Destructor */
          virtual ~Building();
 
+         /*! Do the building simulation step */
+         virtual void step()=0;
+
          /*! Change current building model to another one.
           * \param filename of the new model to use */
          void changeModel(Kobold::String filename);

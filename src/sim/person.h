@@ -36,7 +36,7 @@ namespace SimuFaith
 #define FAITH_OPINION_HALF_VALUE (FAITH_OPINION_MAX_VALUE / 2)
 
    /*! A single person - potentially a faith follower - in the game */
-   class Person
+   class Person : public Kobold::ListElement
    {
       public:
          /*! Personal info about a Faith. */
@@ -103,7 +103,18 @@ namespace SimuFaith
                 * by the person. */
                Faith* getFaith();
 
+               /*! Apply personal mind influence to another person.
+                * \param target person to be influenced
+                * \param value how much important the influence is
+                *        (ie: how much will sum to likeness / dislikeness) */
+               void applyInfluence(Person* target, int value);
+
             private:
+               /*! Check if should apply likeness or dislikeness influence,
+                * based on its current value
+                * \return if should apply influce (true) or not (false). */
+               bool checkRandom(int likeOrDislikeValue);
+
                Kobold::List faiths; /**< Each faith info */
                FaithInfo* curFaith; /**< Info about current adopted faith */
          };
@@ -158,6 +169,14 @@ namespace SimuFaith
          /*! Remove a person's child (usually due to death
           * \param child pointer to the person to remove. */
          void removeChild(Person* child);
+
+         /*! Do a simulation step for the person.
+          * \note at the person's step, we only do personal influences 
+          * to its faith (as parents, unemployement, etc). 
+          * Other influences, like temple nearby, priests, co-workers,
+          * other house members, etc, are done inside its respective
+          * source buildings steps. */
+         virtual void step();
 
       private:
          Mind mind;            /**< Person's mind */
