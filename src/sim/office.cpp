@@ -102,5 +102,11 @@ void Office::removeWorker(Worker* worker)
  *************************************************************************/
 void Office::step()
 {
+   Worker* worker = (Worker*) personnel.getFirst();
+   for(int i = 0; i < personnel.getTotal(); i++)
+   {
+      //TODO!
+      worker = (Worker*) worker->getNext();
+   }
 }
 

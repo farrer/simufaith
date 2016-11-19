@@ -46,3 +46,15 @@ set(SIMUFAITH_SOURCES
 set(SIMUFAITH_HEADERS
 )
 
+set(TEST_SOURCES
+   tests/testcase.cpp
+   tests/testperson.cpp
+   tests/runtests.cpp
+)
+
+set(TEST_HEADERS
+   tests/testcase.h
+   tests/testperson.h
+)
+
+

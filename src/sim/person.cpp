@@ -159,7 +159,6 @@ Person::FaithInfo* Person::Mind::getFaithInfo(Faith* faith)
  ***********************************************************************/
 void Person::Mind::defineCurrentFaith()
 {
-   //TODO: create unit test for this function.
    FaithInfo* f = (FaithInfo*) faiths.getFirst();
    for(int i = 0; i < faiths.getTotal(); i++)
    {
@@ -316,9 +315,17 @@ Person::Person(Kobold::String name, int age, Person* parentA, Person* parentB,
    this->worker = NULL;
    this->inhabitant = NULL;
 
-   /* Load its model */
-   this->model = new Goblin::Model3d("person" + 
-         Kobold::StringUtil::toString(count), filename, sceneManager);
+   if(sceneManager)
+   {
+      /* Load its model */
+      this->model = new Goblin::Model3d("person" + 
+            Kobold::StringUtil::toString(count), filename, sceneManager);
+   }
+   else
+   {
+      /* No model, we are for sure running on a TestCase */
+      this->model = NULL;
+   }
    count++;
 
    World::addPerson(this);
@@ -366,6 +373,14 @@ Person* Person::getParentA()
 Person* Person::getParentB()
 {
    return parentB;
+}
+
+/***********************************************************************
+ *                               getMind                               *
+ ***********************************************************************/
+Person::Mind* Person::getMind()
+{
+   return &mind;
 }
 
 /***********************************************************************

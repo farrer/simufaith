@@ -66,4 +66,5 @@ Goblin::Model3d* Building::getModel()
   return model;
 }
 
+int Building::count = 0;
 

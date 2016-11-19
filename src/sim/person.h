@@ -148,6 +148,9 @@ namespace SimuFaith
          /*! \return second person's parent pointer (could be NULL) */
          Person* getParentB();
 
+         /*! \return person's mind */
+         Mind* getMind();
+
          /*! Set worker of the person (if NULL -> unemployed).
           * \param worker worker pointer */
          void setAsWorker(Office::Worker* worker);

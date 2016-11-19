@@ -31,6 +31,7 @@ project(simufaith)
 
 # Define some options
 option(SIMUFAITH_DEBUG "Enable debug symbols" FALSE)
+option(SIMUFAITH_COMPILE_TESTS "Enable debug symbols" TRUE)
 
 # Some compiler options
 if(${SIMUFAITH_DEBUG})
@@ -112,4 +113,28 @@ target_link_libraries(simufaith simlib uilib corelib
                       ${VORBISFILE_LIBRARY} ${VORBIS_LIBRARY}
                       ${OGG_LIBRARY} m
                       ${LIBINTL_LIBRARIES} pthread)
+
+if(${SIMUFAITH_COMPILE_TESTS})
+   add_executable(runtests WIN32 ${TEST_SOURCES} ${TEST_HEADERS} )
+   target_link_libraries(runtests  simlib uilib corelib
+      ${OPENGL_LIBRARY}
+      ${FARSO_LIBRARY}
+      ${GOBLIN_LIBRARY}
+      ${KOSOUND_LIBRARY}
+      ${KOBOLD_LIBRARY}
+      ${OGRE_LIBRARIES} 
+      ${OGRE_RTShaderSystem_LIBRARIES}
+      ${OGRE_Overlay_LIBRARIES} 
+      ${SDL2_IMAGE_LIBRARY}
+      ${SDL2_LIBRARY} 
+      ${FREETYPE_LIBRARY}
+      ${OPENAL_LIBRARY} 
+      ${VORBISFILE_LIBRARY}
+      ${VORBIS_LIBRARY}
+      ${OGG_LIBRARY}
+      m
+      ${LIBINTL_LIBRARIES}
+      pthread)
+endif(${SIMUFAITH_COMPILE_TESTS})
+
 
