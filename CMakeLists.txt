@@ -31,7 +31,7 @@ project(simufaith)
 
 # Define some options
 option(SIMUFAITH_DEBUG "Enable debug symbols" FALSE)
-option(SIMUFAITH_COMPILE_TESTS "Enable debug symbols" TRUE)
+option(SIMUFAITH_COMPILE_TESTS "Build SimuFaith unit tests" TRUE)
 
 # Some compiler options
 if(${SIMUFAITH_DEBUG})
