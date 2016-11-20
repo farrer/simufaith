@@ -52,14 +52,26 @@ namespace SimuFaithTests
                void run(TestSuite* suite) throw();
          };
 
-         /*! Test for parent Faith propagation on simulation */
+         /*! Test for parent Faith propagation on simulation. This TestCase
+          * will make sure that parent's Faith, by themselves, are sufficient
+          * for its children conversion with no other influences involved. */
          class TestParentFaithOnSimulation : public TestCase
          {
             public:
                void doBeforeTest();
                void doAfterTest();
                void run(TestSuite* suite) throw();
-
+            private:
+               /* Family 1 */
+               SimuFaith::Person* parentA1;
+               SimuFaith::Person* parentB1;
+               SimuFaith::Person* child1A;
+               SimuFaith::Person* child1B;
+               /* Family 2 */
+               SimuFaith::Person* parentA2;
+               SimuFaith::Person* parentB2;
+               SimuFaith::Person* child2A;
+               SimuFaith::Person* child2B;
          };
 
          TestPerson();

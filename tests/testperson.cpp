@@ -26,7 +26,6 @@ using namespace SimuFaithTests;
 void TestPerson::TestDefineCurrentFaith::doBeforeTest()
 {
    person = new SimuFaith::Person("Persona", 30, NULL, NULL, "", NULL);
-   SimuFaith::World::addPerson(person);
 }
 
 /*************************************************************************
@@ -35,7 +34,7 @@ void TestPerson::TestDefineCurrentFaith::doBeforeTest()
 void TestPerson::TestDefineCurrentFaith::doAfterTest()
 {
    /* Must remove our created person */
-   SimuFaith::World::removePerson(person);
+   delete person;
 }
 
 /*************************************************************************
@@ -87,19 +86,126 @@ void TestPerson::TestApplyInfluence::doAfterTest()
 void TestPerson::TestApplyInfluence::run(TestSuite* suite) throw()
 {
 }
-         
+
+/*************************************************************************
+ *                    TestParentFaithOnSimulation                        *
+ *************************************************************************/     
 void TestPerson::TestParentFaithOnSimulation::doBeforeTest()
 {
+   /* Create Family 1 */
+   parentA1 = new SimuFaith::Person("ParentA1", 38, NULL, NULL, "", NULL);
+   parentB1 = new SimuFaith::Person("ParentB1", 34, NULL, NULL, "", NULL);
+   child1A = new SimuFaith::Person("Child1A", 8, parentA1, parentB1, "", NULL);
+   child1B = new SimuFaith::Person("Child1B", 11, parentA1, parentB1, "", NULL);
+
+   /* Create Family 2 */
+   parentA2 = new SimuFaith::Person("ParentA2", 38, NULL, NULL, "", NULL);
+   parentB2 = new SimuFaith::Person("ParentB2", 34, NULL, NULL, "", NULL);
+   child2A = new SimuFaith::Person("Child2A", 8, parentA2, parentB2, "", NULL);
+   child2B = new SimuFaith::Person("Child2B", 11, parentA2, parentB2, "", NULL);
 }
 
+/*************************************************************************
+ *                    TestParentFaithOnSimulation                        *
+ *************************************************************************/
 void TestPerson::TestParentFaithOnSimulation::doAfterTest()
 {
+   /* Must remove all created persons */
+   delete parentA1;
+   delete parentB1;
+   delete child1A;
+   delete child1B;
+   delete parentA2;
+   delete parentB2;
+   delete child2A;
+   delete child2B;
 }
 
+/*************************************************************************
+ *                    TestParentFaithOnSimulation                        *
+ *************************************************************************/
 void TestPerson::TestParentFaithOnSimulation::run(TestSuite* suite) throw()
 {
+   TestPerson* testPerson = (TestPerson*) suite;
+
+   /* Let's define Family 1 Faiths: both parents with same. */
+   parentA1->getMind()->getFaithInfo(testPerson->faithA)->set(
+         FAITH_OPINION_HALF_VALUE + 1, 100);
+   parentB1->getMind()->getFaithInfo(testPerson->faithA)->set(
+         FAITH_OPINION_HALF_VALUE + 100, 80);
+   parentA1->getMind()->getFaithInfo(testPerson->faithB)->set(100, 80);
+   parentB1->getMind()->getFaithInfo(testPerson->faithB)->set(80, 100);
+   parentA1->getMind()->defineCurrentFaith();
+   parentB1->getMind()->defineCurrentFaith();
+
+   /* And Family 2 Faiths: each parent with a faith. */
+   parentA2->getMind()->getFaithInfo(testPerson->faithA)->set(
+         FAITH_OPINION_HALF_VALUE + 80, 80);
+   parentB2->getMind()->getFaithInfo(testPerson->faithA)->set(100, 100);
+   parentA2->getMind()->getFaithInfo(testPerson->faithB)->set(80, 80);
+   parentB2->getMind()->getFaithInfo(testPerson->faithB)->set(
+         FAITH_OPINION_HALF_VALUE + 100, 100);
+   parentA2->getMind()->defineCurrentFaith();
+   parentB2->getMind()->defineCurrentFaith();
+
+   for(int i = 0; i < FAITH_OPINION_MAX_VALUE; i++)
+   {
+      SimuFaith::World::step();
+   }
+
+   /* Let's check children's minds. */
+   assertTrue(child1A->getFaith() == testPerson->faithA);
+
+   /* Make sure the Faith isn't greater of its parents */
+   SimuFaith::Person::FaithInfo* childFaithInfo = 
+      child1A->getMind()->getFaithInfo(testPerson->faithA);
+   assertTrue(childFaithInfo->getLikeness() == 
+         parentB1->getMind()->getFaithInfo(testPerson->faithA)->getLikeness());
+   /* Make sure no dislikeness propagated to its own faith */
+   assertTrue(childFaithInfo->getDislikeness() == 0);
+   /* And that FaithB is equal to its greater parent, both like and dislike */
+   childFaithInfo = child1A->getMind()->getFaithInfo(testPerson->faithB);
+   assertTrue(childFaithInfo->getLikeness() == 100);
+   assertTrue(childFaithInfo->getDislikeness() == 100);
+
+   /* Same for child1B */
+   assertTrue(child1B->getFaith() == testPerson->faithA);
+   childFaithInfo = child1B->getMind()->getFaithInfo(testPerson->faithA);
+   assertTrue(childFaithInfo->getLikeness() == 
+         parentB1->getMind()->getFaithInfo(testPerson->faithA)->getLikeness());
+   assertTrue(childFaithInfo->getDislikeness() == 0);
+   childFaithInfo = child1B->getMind()->getFaithInfo(testPerson->faithB);
+   assertTrue(childFaithInfo->getLikeness() == 100);
+   assertTrue(childFaithInfo->getDislikeness() == 100);
+
+   /* Now let's check children of family 2 */
+   assertTrue(child2A->getFaith() == testPerson->faithB);
+   childFaithInfo = child2A->getMind()->getFaithInfo(testPerson->faithB);
+   assertTrue(childFaithInfo->getLikeness() == 
+         parentB2->getMind()->getFaithInfo(testPerson->faithB)->getLikeness());
+   /* Must have the dislikeness of other parent on it */
+   assertTrue(childFaithInfo->getDislikeness() == 80);
+   /* And other Faith must be of greater likness / dislikeness from parents */
+   childFaithInfo = child2A->getMind()->getFaithInfo(testPerson->faithA);
+   assertTrue(childFaithInfo->getLikeness() == 
+         parentA2->getMind()->getFaithInfo(testPerson->faithA)->getLikeness());
+   assertTrue(childFaithInfo->getDislikeness() == 100);
+
+   /* Same for other children */
+   assertTrue(child2B->getFaith() == testPerson->faithB);
+   childFaithInfo = child2B->getMind()->getFaithInfo(testPerson->faithB);
+   assertTrue(childFaithInfo->getLikeness() == 
+         parentB2->getMind()->getFaithInfo(testPerson->faithB)->getLikeness());
+   assertTrue(childFaithInfo->getDislikeness() == 80);
+   childFaithInfo = child2B->getMind()->getFaithInfo(testPerson->faithA);
+   assertTrue(childFaithInfo->getLikeness() == 
+         parentA2->getMind()->getFaithInfo(testPerson->faithA)->getLikeness());
+   assertTrue(childFaithInfo->getDislikeness() == 100);
 }
 
+/*************************************************************************
+ *                              Constructor                              *
+ *************************************************************************/
 TestPerson::TestPerson()
 {
    tests.insert(new TestDefineCurrentFaith());
@@ -107,15 +213,24 @@ TestPerson::TestPerson()
    tests.insert(new TestParentFaithOnSimulation());
 }
 
+/*************************************************************************
+ *                               Destructor                              *
+ *************************************************************************/
 TestPerson::~TestPerson()
 {
 }
 
+/*************************************************************************
+ *                               getTests                                *
+ *************************************************************************/
 Kobold::List* TestPerson::getTests()
 {
    return &tests;
 }
 
+/*************************************************************************
+ *                           doCreateScenario                            *
+ *************************************************************************/
 void TestPerson::doCreateScenario()
 {
    /* Init the world with 3 Faiths */
@@ -126,6 +241,9 @@ void TestPerson::doCreateScenario()
    faithC = SimuFaith::World::createFaith("Faith C");
 }
 
+/*************************************************************************
+ *                           doFinishScenario                            *
+ *************************************************************************/
 void TestPerson::doFinishScenario()
 {
    /* Done with our world */

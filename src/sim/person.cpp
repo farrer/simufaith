@@ -264,8 +264,34 @@ void Person::Mind::applyInfluence(Person* target, int value)
             tgt->addDislikeness(value);
          }
       }
+
+      /* Let's get next faith info for both person and target */
+      f = (FaithInfo*) f->getNext();
+      tgt = (FaithInfo*) tgt->getNext();
+   }
+}
+
+/***********************************************************************
+ *                             toString                                *
+ ***********************************************************************/
+Kobold::String Person::Mind::toString()
+{
+   Kobold::String ret = "";
+
+   FaithInfo* f = (FaithInfo*) faiths.getFirst();
+   for(int i = 0; i < faiths.getTotal(); i++)
+   {
+      ret += "\t";
+      ret += f->getFaith()->getName();
+      ret += " - likeness: ";
+      ret += Kobold::StringUtil::toString(f->getLikeness());
+      ret += " dislikeness: ";
+      ret += Kobold::StringUtil::toString(f->getDislikeness());
+      ret += "\n";
       f = (FaithInfo*) f->getNext();
    }
+
+   return ret;
 }
 
 /***********************************************************************
@@ -373,6 +399,14 @@ Person* Person::getParentA()
 Person* Person::getParentB()
 {
    return parentB;
+}
+
+/***********************************************************************
+ *                             getName                                 *
+ ***********************************************************************/
+Kobold::String Person::getName()
+{
+   return name;
 }
 
 /***********************************************************************

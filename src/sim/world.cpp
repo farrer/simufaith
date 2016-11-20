@@ -115,7 +115,7 @@ void World::step()
       case STEP_BUILDINGS:
       {
          Building* building = (Building*) buildings->getFirst();
-         for(int i = 0; i < people->getTotal(); i++)
+         for(int i = 0; i < buildings->getTotal(); i++)
          {
             building->step();
             building = (Building*) building->getNext();

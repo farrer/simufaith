@@ -109,6 +109,10 @@ namespace SimuFaith
                 *        (ie: how much will sum to likeness / dislikeness) */
                void applyInfluence(Person* target, int value);
 
+               /*! Convert mind information to a String, making easer to
+                * debug / log it. */
+               Kobold::String toString();
+
             private:
                /*! Check if should apply likeness or dislikeness influence,
                 * based on its current value
@@ -180,6 +184,9 @@ namespace SimuFaith
           * other house members, etc, are done inside its respective
           * source buildings steps. */
          virtual void step();
+
+         /*! \return person's name */
+         Kobold::String getName();
 
       private:
          Mind mind;            /**< Person's mind */
