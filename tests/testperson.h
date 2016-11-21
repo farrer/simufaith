@@ -50,6 +50,9 @@ namespace SimuFaithTests
                void doBeforeTest();
                void doAfterTest();
                void run(TestSuite* suite) throw();
+            private:
+               SimuFaith::Person* personA;
+               SimuFaith::Person* personB;
          };
 
          /*! Test for parent Faith propagation on simulation. This TestCase

@@ -18,6 +18,7 @@
 */
 
 #include "testperson.h"
+#include "../src/sim/util.h"
 using namespace SimuFaithTests;
 
 /*************************************************************************
@@ -75,21 +76,90 @@ void TestPerson::TestDefineCurrentFaith::run(TestSuite* suite) throw()
    assertTrue(person->getMind()->getFaith() == testPerson->faithC);
 }
 
+/*************************************************************************
+ *                        TestApplyInfluence                             *
+ *************************************************************************/
 void TestPerson::TestApplyInfluence::doBeforeTest()
 {
+   personA = new SimuFaith::Person("Persona", 30, NULL, NULL, "", NULL);
+   personB = new SimuFaith::Person("Personb", 30, NULL, NULL, "", NULL);
 }
 
+/*************************************************************************
+ *                        TestApplyInfluence                             *
+ *************************************************************************/
 void TestPerson::TestApplyInfluence::doAfterTest()
 {
+   delete personA;
+   delete personB;
 }
 
+/*************************************************************************
+ *                        TestApplyInfluence                             *
+ *************************************************************************/
 void TestPerson::TestApplyInfluence::run(TestSuite* suite) throw()
 {
+   TestPerson* testPerson = (TestPerson*) suite;
+   SimuFaith::Person::FaithInfo* faithApA =  personA->getMind()->getFaithInfo(
+         testPerson->faithA);
+   SimuFaith::Person::FaithInfo* faithApB =  personB->getMind()->getFaithInfo(
+         testPerson->faithA);
+   SimuFaith::Person::FaithInfo* faithBpA =  personA->getMind()->getFaithInfo(
+         testPerson->faithB);
+   SimuFaith::Person::FaithInfo* faithBpB =  personB->getMind()->getFaithInfo(
+         testPerson->faithB);
+   SimuFaith::Person::FaithInfo* faithCpA =  personA->getMind()->getFaithInfo(
+         testPerson->faithC);
+   SimuFaith::Person::FaithInfo* faithCpB =  personB->getMind()->getFaithInfo(
+         testPerson->faithC);
+
+
+   /* Sequence of getRandom will be: 31740, 18524, 28681, 45884, 38824, 
+    * 26439 */
+   srand(153);
+
+   /* Let's try to apply influence of a target with Faith likeness
+    * greater than same Faith likenes of 'influencer' (and check no influence
+    * happen) */
+   faithApA->set(FAITH_OPINION_HALF_VALUE + 20, 21);
+   faithApB->set(FAITH_OPINION_HALF_VALUE + 30, 31);
+   personA->getMind()->defineCurrentFaith();
+   personB->getMind()->defineCurrentFaith();
+   personA->getMind()->applyInfluence(personB, 100);
+   assertTrue(faithApB->getLikeness() == FAITH_OPINION_HALF_VALUE + 30);
+   assertTrue(faithApB->getDislikeness() == 31);
+
+   /* Let's influence a current Faith, check if no dislikeness happens, and
+    * also check other faiths one that should happen, and one that shouldn't */
+   srand(153);
+   faithApA->set(FAITH_OPINION_HALF_VALUE + 30, 31);
+   faithApB->set(FAITH_OPINION_HALF_VALUE + 20, 21);
+   faithBpA->set(46300, 310);
+   faithBpB->set(20, 21);
+   faithCpA->set(46300, 31);
+   faithCpB->set(40, 21);
+   personA->getMind()->defineCurrentFaith();
+   personB->getMind()->defineCurrentFaith();
+
+   personA->getMind()->applyInfluence(personB, 100);
+
+   /* Check current faith likeness applyed, but without dislikeness */
+   assertTrue(faithApB->getLikeness() == FAITH_OPINION_HALF_VALUE + 120);
+   assertTrue(faithApB->getDislikeness() == 21);
+
+   /* FaithB should have likeness and dislikeness applyed */
+   assertTrue(faithBpB->getLikeness() == 120);
+   assertTrue(faithBpB->getDislikeness() == 121);
+
+   /* Faith C should only have likeness applyed (as it like it more than
+    * personA dislikes it). */
+   assertTrue(faithCpB->getLikeness() == 140);
+   assertTrue(faithCpB->getDislikeness() == 21);
 }
 
 /*************************************************************************
  *                    TestParentFaithOnSimulation                        *
- *************************************************************************/     
+ *************************************************************************/
 void TestPerson::TestParentFaithOnSimulation::doBeforeTest()
 {
    /* Create Family 1 */

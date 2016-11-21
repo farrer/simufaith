@@ -208,11 +208,9 @@ bool Person::Mind::checkRandom(int likeOrDislikeValue)
  ***********************************************************************/
 void Person::Mind::applyInfluence(Person* target, int value)
 {
-   //TODO: create unit test for this function. 
-
    /* Note that if the likeness or dislikeness is lesser than the
     * target likeness or dislikeness, no influence will happen (as the target
-    * is much more convincted of its opinion than the person). */
+    * is much more convicted of its opinion than the person). */
 
    /* Firstly, let's apply current Faith as a likeness-only one (although a
     * person can dislike somethings of its current faith, it tends to not
