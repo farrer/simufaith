@@ -105,7 +105,25 @@ void Office::step()
    Worker* worker = (Worker*) personnel.getFirst();
    for(int i = 0; i < personnel.getTotal(); i++)
    {
-      //TODO!
+      /* Apply worker mind to each other worker at the office */
+      Worker* partner = (Worker*) personnel.getFirst();
+      for(int j = 0; j < personnel.getTotal(); j++)
+      {
+         if(partner != worker)
+         {
+            /* Calculate influence ammount between worker and its partner */
+            int inf = worker->getLevel() - partner->getLevel() + 1;
+            if(inf <= 0)
+            {
+               inf = 1;
+            }
+            /* Apply it */
+            worker->getPerson()->getMind()->applyInfluence(
+                  partner->getPerson(), inf); 
+         }
+
+         partner = (Worker*) partner->getNext();
+      }
       worker = (Worker*) worker->getNext();
    }
 }

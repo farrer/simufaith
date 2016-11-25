@@ -43,7 +43,7 @@ bool Core::doInit()
 {
    /* Initialize Farso and set our skin */
    Farso::Controller::init(Farso::RENDERER_TYPE_OGRE3D, DEFAULT_WINDOW_WIDTH,
-         DEFAULT_WINDOW_HEIGHT, 32, "");
+         DEFAULT_WINDOW_HEIGHT, 32, "", getSceneManager());
    Farso::FontManager::setDefaultFont("LiberationSans-Regular.ttf");
    Farso::Controller::loadSkin("skins/scifi.skin");
    Farso::Controller::setCursor("cursor/sel.png");
