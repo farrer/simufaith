@@ -48,18 +48,33 @@ namespace SimuFaith
       protected:
 
          /* Direct functions from Goblin::BaseApp */
-         Kobold::String getApplicationUnixName() { return APP_NAME; };
-         int getDefaultWindowWidth() { return DEFAULT_WINDOW_WIDTH; };
-         int getDefaultWindowHeight() { return DEFAULT_WINDOW_HEIGHT; };
-         Orientation getDefaultOrientation() { return LANDSCAPE; };
-         int getMinWidthToUseDoubleSizedGui() { return WIDTH_TO_DOUBLE_SIZE; };
-         Kobold::String getBaseDataDir() 
+         const Kobold::String getApplicationUnixName() const 
+         {
+            return APP_NAME;
+         };
+         const int getDefaultWindowWidth() const 
+         { 
+            return DEFAULT_WINDOW_WIDTH; 
+         };
+         const int getDefaultWindowHeight() const 
+         { 
+            return DEFAULT_WINDOW_HEIGHT; 
+         };
+         const Orientation getDefaultOrientation() const 
+         { 
+            return LANDSCAPE; 
+         };
+         const int getMinWidthToUseDoubleSizedGui() const 
+         { 
+            return WIDTH_TO_DOUBLE_SIZE; 
+         };
+         const Kobold::String getBaseDataDir() const 
          {
             return SIMUFAITH_LOCAL_DATA_PREFIX + Kobold::String(BASE_DATA_DIR);
          };
 
          /* Functions from Goblin::BaseApp */
-         bool doInit();
+         bool doCycleInit(int callCounter, bool& shouldAbort);
          void getDataDirectories(Ogre::String** dataDirectories,
                Ogre::String** dataGroups, int& total);
          void doLowMemoryClean();

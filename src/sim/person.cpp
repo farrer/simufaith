@@ -343,7 +343,8 @@ Person::Person(Kobold::String name, int age, Person* parentA, Person* parentB,
    {
       /* Load its model */
       this->model = new Goblin::Model3d("person" + 
-            Kobold::StringUtil::toString(count), filename, sceneManager);
+            Kobold::StringUtil::toString(count), filename, sceneManager,
+            Goblin::Model3d::MODEL_DYNAMIC);
    }
    else
    {

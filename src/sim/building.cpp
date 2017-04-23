@@ -29,7 +29,8 @@ Building::Building(Ogre::SceneManager* sceneManager, Kobold::String filename)
    this->name = "building" + Kobold::StringUtil::toString(count);
    this->sceneManager = sceneManager;
    this->filename = filename;
-   model = new Goblin::Model3d(this->name, this->filename, this->sceneManager);
+   model = new Goblin::Model3d(this->name, this->filename, this->sceneManager,
+         Goblin::Model3d::MODEL_STATIC);
 
    World::addBuilding(this);
    count++;
@@ -54,7 +55,8 @@ void Building::changeModel(Kobold::String filename)
    {
       delete model;
       this->filename = filename;
-      model = new Goblin::Model3d(this->name, filename, this->sceneManager);
+      model = new Goblin::Model3d(this->name, filename, this->sceneManager,
+         Goblin::Model3d::MODEL_STATIC);
    }
 }
 

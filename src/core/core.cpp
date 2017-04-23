@@ -39,7 +39,7 @@ Core::~Core()
 /************************************************************************
  *                                doInit                                *
  ************************************************************************/
-bool Core::doInit()
+bool Core::doCycleInit(int callCounter, bool& shouldAbort)
 {
    /* Initialize Farso and set our skin */
    Farso::Controller::init(Farso::RENDERER_TYPE_OGRE3D, DEFAULT_WINDOW_WIDTH,
