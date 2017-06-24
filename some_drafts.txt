@@ -6,7 +6,7 @@ SimuFaith
                                    The Only TRUE God, Itself
 
    "I've played this for my whole life"
-                                        Bishop Emir Placedo
+                                        Bishop Emir Placebo
 
    "We won't be able to raise money for the cathedral after it" 
                                           Archbishop Volmar de Oliveira
@@ -17,23 +17,23 @@ Game Objectives:
 - As monotheistic, your god is either the only true god (and all other gods
   are false ones) or all other gods, to you, are just the same god of yours
   (their followers just didn't realized that!). Either way, your religion is
-  totalitarian and will aim to be the single one (or reconized by all others
+  totalitarian and will aim to be the single one (or recognized by all others
   that all religions are the same). You should:
   - Mainly survive and don't be extinct by other monotheistic religions;
   - Extinct other religions or force them to conceive that they follow the same
-    god of yours.
+    god as yours.
 
 Game Play
 
 - User chooses their 'messiah' and its faith's name.
 
 - Game inits with a single priest and some amount of money in a pre-built
-  city, where some lots are available to buy.
+  city, where some terrains are available to buy.
   \  Oponents could be pre-established faiths or newcomers as yours.
 
-- You must buy a lot and construct your first temple.
+- You must buy a terrain and construct your first temple.
 
-- Each 'religious-actor' on the game (you and your oponents) must attract 
+- Each 'religious-actor' on the game (you and your opponents) must attract 
   city's population to their cult. The ammount of people following a religion 
   is the main 'on-conflict' resource.
 
@@ -76,7 +76,7 @@ Game Play
 
    What will cost money:
       - Temples and school ordinary expenses;
-      - Miracles (it's exensive to be plausible)
+      - Miracles (it's expensive to be plausible)
       - Buying space on the media
       - Creating new priests
       - Governmental taxes (could be extinct if you are able to pass a law)
@@ -86,7 +86,7 @@ Game Play
       - Sell 'saint' items
       - Sell faithfull books and music
       - Part of your politician's salary
-      - Sell space on your TV/Radio/Newspaper (beware: it could be bougth by 
+      - Sell space on your TV/Radio/Newspaper (beware: it could be bough by 
         your oponents against your faith)
       - Use your politicians in favour of some enterprise for a bribe. (beware:
         if caught and those bribes got public, you'll lose followers).
